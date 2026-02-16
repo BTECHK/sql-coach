@@ -994,7 +994,16 @@ Commands: run <sql> │ hint │ next │ answer │ schema │ help
 
                 # Check if matches answer (loosely)
                 if lesson and self.normalize_sql(sql) == self.normalize_sql(lesson["answer"]):
-                    print_success_box(f"Perfect! That matches the expected solution!\n\n{C.YELLOW}Follow-up:{C.RESET} {lesson.get('follow_up', 'Try the next lesson!')}")
+                    # Mark lesson as completed
+                    if lesson["id"] not in self.progress["completed_lessons"]:
+                        self.progress["completed_lessons"].append(lesson["id"])
+                        save_progress(self.progress)
+
+                    next_id = get_next_lesson_id(lesson["id"])
+                    if next_id:
+                        print_success_box(f"Perfect! That matches the expected solution!\n\n{C.YELLOW}Follow-up:{C.RESET} {lesson.get('follow_up', 'Try the next lesson!')}\n\n{C.CYAN}Type 'next' to continue to Lesson {next_id}, or keep practicing.{C.RESET}")
+                    else:
+                        print_success_box(f"Perfect! You've completed ALL lessons! Congratulations!")
             return True
 
         # Hint
@@ -1009,10 +1018,25 @@ Commands: run <sql> │ hint │ next │ answer │ schema │ help
                 print(f"{C.YELLOW}No more hints! Type 'answer' to see the solution.{C.RESET}")
             return True
 
-        # Next step
+        # Next step or next lesson
         if cmd_lower == "next":
             if not lesson:
                 return True
+
+            # If lesson is completed, advance to next lesson
+            if lesson["id"] in self.progress["completed_lessons"]:
+                next_id = get_next_lesson_id(lesson["id"])
+                if next_id:
+                    self.progress["current_lesson"] = next_id
+                    save_progress(self.progress)
+                    clear_screen()
+                    print_banner()
+                    self.show_current_lesson()
+                else:
+                    print_success_box("Congratulations! You've completed all lessons!")
+                return True
+
+            # Otherwise show solution steps
             steps = lesson.get("solution_steps", [])
             if self.current_step < len(steps):
                 print_next_step_box(self.current_step + 1, len(steps), steps[self.current_step])
@@ -1144,6 +1168,19 @@ Commands: run <sql> │ hint │ next │ answer │ schema │ help
             else:
                 print(f"\n{C.GREEN}Query executed!{C.RESET}\n")
                 print_table(columns, rows)
+
+                # Check if matches answer (loosely)
+                if lesson and self.normalize_sql(cmd) == self.normalize_sql(lesson["answer"]):
+                    # Mark lesson as completed
+                    if lesson["id"] not in self.progress["completed_lessons"]:
+                        self.progress["completed_lessons"].append(lesson["id"])
+                        save_progress(self.progress)
+
+                    next_id = get_next_lesson_id(lesson["id"])
+                    if next_id:
+                        print_success_box(f"Perfect! That matches the expected solution!\n\n{C.YELLOW}Follow-up:{C.RESET} {lesson.get('follow_up', 'Try the next lesson!')}\n\n{C.CYAN}Type 'next' to continue to Lesson {next_id}, or keep practicing.{C.RESET}")
+                    else:
+                        print_success_box(f"Perfect! You've completed ALL lessons! Congratulations!")
         else:
             print(f"{C.YELLOW}Unknown command. Type 'help' for available commands.{C.RESET}")
 
@@ -1194,6 +1231,11 @@ if __name__ == "__main__":
             import ctypes
             kernel32 = ctypes.windll.kernel32
             kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
+        except:
+            pass
+        # Fix UTF-8 encoding for Windows console
+        try:
+            sys.stdout.reconfigure(encoding='utf-8')
         except:
             pass
 

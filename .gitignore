@@ -26,3 +26,9 @@ Thumbs.db
 
 # Reference PDFs (large binary files, stored separately)
 *.pdf
+
+# Personal progress data
+progress.json
+
+# Temp files
+nul
