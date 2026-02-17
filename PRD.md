@@ -11,19 +11,19 @@
 
 ### 1.1 Problem Statement
 
-Technical interview candidates preparing for Google gTech Ads roles struggle to practice SQL effectively because generic SQL tutorials don't cover ad tech-specific data patterns, and existing resources don't simulate the interview experience where candidates must ask clarifying questions before diving into code.
+People learning SQL struggle to practice effectively because generic SQL tutorials don't cover real-world data patterns, and existing resources provide answers immediately without teaching the problem-solving process that builds lasting skills.
 
 **Customer Quote Evidence:**
-> "I know SQL basics, but I freeze up in interviews when I see unfamiliar table structures. I wish I could practice with realistic ad data and learn to think through problems the way interviewers expect."
-> — Technical interview candidate
+> "I know SQL basics, but I struggle with unfamiliar table structures. I wish I could practice with realistic business data and learn to think through problems systematically."
+> — SQL learner
 
 ### 1.2 Opportunity
 
-Google gTech Ads Technical Solutions Consultant roles require strong SQL skills with specific patterns: micros-based currency, campaign hierarchies, device segmentation, and window functions for ranking/comparison. The interview process explicitly tests for structured problem-solving, not just correct answers. No existing tool combines realistic ad tech data with interview-style progressive hints.
+Ad tech data represents a rich domain for learning SQL with specific patterns: micros-based currency, campaign hierarchies, device segmentation, and window functions for ranking/comparison. No existing tool combines realistic ad tech data with progressive hints that teach structured problem-solving.
 
 ### 1.3 Solution Summary
 
-SQL Coach is an interactive CLI tool that teaches SQL through 13 structured lessons using Google Ads-style data. It provides interview-style progressive hints (clarifying questions → approach → conceptual hints → code hints) that train users to think like interviewers expect, plus automatic progress tracking.
+SQL Coach is an interactive CLI tool that teaches SQL through 13 structured lessons using advertising-style data. It provides progressive hints (clarifying questions → approach → conceptual hints → code hints) that train users to think through problems systematically, plus automatic progress tracking.
 
 ### 1.4 Success Metrics
 
@@ -39,40 +39,40 @@ SQL Coach is an interactive CLI tool that teaches SQL through 13 structured less
 
 ### 2.1 Primary User Persona
 
-**Name:** Interview Prepper
-**Segment:** Technical candidates preparing for Google gTech Ads or similar ad tech roles
+**Name:** SQL Learner
+**Segment:** Developers and analysts looking to strengthen SQL skills with realistic data
 
 **Demographics:**
 - 2-5 years technical experience
 - Familiar with SQL basics but not ad tech patterns
-- Preparing for interviews within 1-4 weeks
+- Seeking to improve SQL proficiency
 
 **Jobs to be Done:**
 
 | Job Type | Job Statement | Priority |
 |----------|---------------|----------|
-| Functional | Practice SQL with realistic ad tech data structures | P0 |
+| Functional | Practice SQL with realistic business data structures | P0 |
 | Functional | Learn to ask clarifying questions before writing queries | P0 |
-| Emotional | Feel confident walking into technical interviews | P0 |
-| Social | Demonstrate structured problem-solving to interviewers | P1 |
+| Emotional | Feel confident tackling complex SQL problems | P0 |
+| Social | Demonstrate structured problem-solving skills | P1 |
 
 **Pain Points (from research):**
-1. Generic SQL tutorials don't cover ad tech patterns - "LeetCode SQL problems are nothing like what I see in ad tech interviews"
-2. No practice with interview format - "I know the SQL but I don't know how to approach the problem out loud"
+1. Generic SQL tutorials don't cover real-world data patterns - "LeetCode SQL problems are nothing like what I see in real business data"
+2. No practice with systematic problem-solving - "I know the SQL but I don't know how to approach problems methodically"
 
 **Current Alternatives:**
-- LeetCode/HackerRank - Why it fails: Generic problems, no ad tech context, no interview-style thinking
+- LeetCode/HackerRank - Why it fails: Generic problems, no business context, no structured thinking
 - YouTube tutorials - Why it fails: Passive learning, can't practice interactively
-- Google BigQuery documentation - Why it fails: Reference material, not structured learning
+- BigQuery documentation - Why it fails: Reference material, not structured learning
 
 **Success Criteria (in their words):**
-> "I want to walk into the interview knowing I've seen these exact types of problems and practiced thinking through them the right way."
+> "I want to feel confident that I've practiced with realistic data and learned to think through problems the right way."
 
 ### 2.2 Anti-Personas (Who This Is NOT For)
 
 - **Complete SQL beginners** - Why: Assumes basic SELECT/FROM knowledge
 - **Experienced ad tech analysts** - Why: Content is introductory to intermediate
-- **Non-interview contexts** - Why: Hint system is specifically designed for interview prep
+- **Those seeking only reference material** - Why: Designed for active practice, not lookup
 
 ---
 
@@ -83,7 +83,7 @@ SQL Coach is an interactive CLI tool that teaches SQL through 13 structured less
 | Epic | Description | Priority | JTBD Mapping |
 |------|-------------|----------|--------------|
 | Epic 1: Structured Curriculum | 13 lessons across 4 phases with progressive difficulty | P0 | Practice SQL with realistic data |
-| Epic 2: Interview-Style Hints | Progressive hint system mimicking interview dialogue | P0 | Learn to ask clarifying questions |
+| Epic 2: Progressive Hints | Progressive hint system teaching systematic problem-solving | P0 | Learn to ask clarifying questions |
 | Epic 3: Progress Tracking | Save/resume progress across sessions | P1 | Complete curriculum over multiple sessions |
 | Epic 4: Query Execution | Run SQL against realistic ad data | P0 | Practice with realistic data |
 
@@ -94,14 +94,14 @@ SQL Coach is an interactive CLI tool that teaches SQL through 13 structured less
 | ID | User Story | Acceptance Criteria | Priority |
 |----|------------|---------------------|----------|
 | US-001 | As a learner, I want lessons organized by topic so I can build skills progressively | - 4 phases: Foundations, Aggregation, JOINs, Window Functions<br>- Each phase builds on previous | P0 |
-| US-002 | As a learner, I want each lesson to explain concepts before challenging me | - Concept section with syntax examples<br>- Google Ads context provided<br>- Interview tips included | P0 |
-| US-003 | As a learner, I want realistic challenges that mirror interview questions | - Challenges use ad tech terminology<br>- Multiple tables involved<br>- Real-world scenarios | P0 |
+| US-002 | As a learner, I want each lesson to explain concepts before challenging me | - Concept section with syntax examples<br>- Ad tech context provided<br>- Practical tips included | P0 |
+| US-003 | As a learner, I want realistic challenges that mirror real-world problems | - Challenges use ad tech terminology<br>- Multiple tables involved<br>- Real-world scenarios | P0 |
 
-**Epic 2: Interview-Style Hints**
+**Epic 2: Progressive Hints**
 
 | ID | User Story | Acceptance Criteria | Priority |
 |----|------------|---------------------|----------|
-| US-004 | As a learner, I want hints that teach me to ask clarifying questions | - First hints are questions to ask interviewer<br>- Approach guidance before code | P0 |
+| US-004 | As a learner, I want hints that teach me to ask clarifying questions | - First hints are questions to consider<br>- Approach guidance before code | P0 |
 | US-005 | As a learner, I want progressive hints so I don't see the answer immediately | - Minimum 4 hint levels<br>- Code hints only after conceptual hints | P0 |
 | US-006 | As a learner, I want step-by-step solution building | - Solutions shown incrementally<br>- Can see full answer when ready | P1 |
 
@@ -150,7 +150,7 @@ SQL Coach is an interactive CLI tool that teaches SQL through 13 structured less
 
 | Requirement ID | Requirement | Rationale | Priority |
 |----------------|-------------|-----------|----------|
-| FR-004 | Provide hints in order: clarifying questions → approach → conceptual → code | Mimics interview dialogue | P0 |
+| FR-004 | Provide hints in order: clarifying questions → approach → conceptual → code | Teaches systematic problem-solving | P0 |
 | FR-005 | Track hint usage per lesson | Measure learning efficiency | P1 |
 | FR-006 | Provide step-by-step solution reveal via `next` command | Allows incremental learning | P1 |
 
@@ -334,7 +334,7 @@ progress.json         # User progress (generated)
 | Feature | Description | Priority |
 |---------|-------------|----------|
 | Additional lessons | Subqueries, CASE statements, date functions | P2 |
-| Timed mode | Simulate interview time pressure | P3 |
+| Timed mode | Simulate time pressure for practice | P3 |
 | Custom datasets | Allow users to practice with their own data | P3 |
 | Web version | Browser-based for easier access | P3 |
 
@@ -346,13 +346,13 @@ progress.json         # User progress (generated)
 
 | Feature | SQL Coach | LeetCode | Mode Analytics |
 |---------|-----------|----------|----------------|
-| Ad tech context | ✓ | ✗ | ✗ |
-| Interview-style hints | ✓ | ✗ | ✗ |
-| Progressive curriculum | ✓ | ✓ | ✓ |
-| Free | ✓ | Partial | Partial |
-| Offline capable | ✓ | ✗ | ✗ |
+| Ad tech context | Yes | No | No |
+| Progressive hints | Yes | No | No |
+| Progressive curriculum | Yes | Yes | Yes |
+| Free | Yes | Partial | Partial |
+| Offline capable | Yes | No | No |
 
-### 11.2 Google Ads SQL Patterns Covered
+### 11.2 Ad Tech SQL Patterns Covered
 
 - Micros to USD conversion
 - Campaign/Ad Group hierarchy queries

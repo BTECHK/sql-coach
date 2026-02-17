@@ -1,20 +1,20 @@
 # SQL Coach
 
-An interactive CLI tool for practicing SQL with a focus on Google Ads data patterns. Designed for technical interview preparation, featuring a structured curriculum, interview-style progressive hints, and automatic progress tracking.
+An interactive CLI tool for practicing SQL with a focus on ad tech data patterns. Designed for learning SQL concepts through realistic business scenarios, featuring a structured curriculum, progressive hints, and automatic progress tracking.
 
 ## Why SQL Coach?
 
 Most SQL practice tools use generic datasets and provide answers immediately. SQL Coach is different:
 
-- **Ad Tech Context**: Practice with realistic Google Ads data (campaigns, ad groups, performance metrics, cost in micros)
-- **Interview-Style Hints**: Learn to ask clarifying questions before coding—exactly what interviewers want to see
-- **Progressive Learning**: Hints reveal in stages (questions → approach → concept → code) to build problem-solving skills
+- **Ad Tech Context**: Practice with realistic advertising data (campaigns, ad groups, performance metrics, cost in micros)
+- **Progressive Hints**: Learn to ask clarifying questions before coding—building strong problem-solving skills
+- **Guided Learning**: Hints reveal in stages (questions → approach → concept → code) to build understanding
 - **Structured Curriculum**: 13 lessons across 4 phases, building from basics to window functions
 
 ## Features
 
 - **13 lessons** across 4 phases: Foundations, Aggregation, JOINs, Window Functions & CTEs
-- **Interview-style hints**: Clarifying questions, approach guidance, conceptual hints, then code hints
+- **Progressive hints**: Clarifying questions, approach guidance, conceptual hints, then code hints
 - **Step-by-step solutions**: See the solution build incrementally
 - **Progress tracking**: Automatically saves your progress between sessions
 - **Colored terminal UI**: Clear visual hierarchy with formatted output
@@ -47,7 +47,7 @@ python sql_coach.py
 |---------|-------------|
 | `run <sql>` | Execute SQL and see results |
 | `<sql>` | Execute SQL directly (auto-detected) |
-| `hint` | Get progressive hints (interview-style) |
+| `hint` | Get progressive hints (guided learning) |
 | `next` | Show next step of the solution |
 | `answer` | Show full solution |
 | `explain` | Explain execution order of last query |
@@ -94,7 +94,7 @@ python sql_coach.py
 
 ## Database Schema
 
-The practice database simulates Google Ads data:
+The practice database uses realistic advertising data:
 
 ```
 campaigns (6 rows)
@@ -162,13 +162,13 @@ Query executed successfully!
 3 row(s) returned
 ```
 
-## Interview Tips Included
+## Learning Tips Included
 
-Each lesson includes interview-specific guidance:
+Each lesson includes practical guidance:
 
 - **Common traps**: "You CANNOT use column aliases from SELECT in WHERE!"
 - **BigQuery tips**: "SELECT * costs money! Always select only columns you need."
-- **Interview patterns**: "Find the top N..." = ORDER BY + LIMIT
+- **Query patterns**: "Find the top N..." = ORDER BY + LIMIT
 - **Execution order**: Understanding why HAVING exists separately from WHERE
 
 ## Documentation
