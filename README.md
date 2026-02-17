@@ -71,4 +71,4 @@ The practice database simulates Google Ads data:
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) for details.
+PolyForm Noncommercial 1.0.0 - Free for personal and noncommercial use. Commercial use requires permission. See [LICENSE](LICENSE) for details.
