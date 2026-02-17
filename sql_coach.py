@@ -97,11 +97,20 @@ FROM defines WHERE the data lives.
 {green}Google Ads Context:{reset} You'll pull from performance tables like campaigns,
 ad_groups, ad_performance_daily constantly.""",
                     "challenge": "Show me all campaign names and their bidding strategies from the campaigns table.",
-                    "hints": [
-                        "You need SELECT and FROM - two keywords",
-                        "The columns you want are: campaign_name, bidding_strategy",
-                        "The table is: campaigns"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "Which table contains campaign information?",
+                            "What specific columns are we looking for?"
+                        ],
+                        "approach": "Identify the table first, then determine which columns to select.",
+                        "english_hints": [
+                            "You need two SQL keywords to retrieve specific columns from a table",
+                            "Think about WHAT you want to see and WHERE the data lives"
+                        ],
+                        "code_hints": [
+                            "SELECT ___, ___ FROM ___"
+                        ]
+                    },
                     "solution_steps": [
                         "SELECT",
                         "SELECT campaign_name, bidding_strategy",
@@ -127,12 +136,20 @@ ad_groups, ad_performance_daily constantly.""",
 
 {yellow}Why?{reset} WHERE executes BEFORE SELECT in the query execution order.""",
                     "challenge": "Find all ad performance rows where device is 'MOBILE' and impressions are greater than 20000.",
-                    "hints": [
-                        "Start with SELECT * FROM ad_performance_daily",
-                        "Add WHERE with two conditions",
-                        "Use AND to combine: device = 'MOBILE' AND impressions > 20000",
-                        "String values need quotes: 'MOBILE'"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "Are we looking for exact match on device or pattern match?",
+                            "Is 20000 inclusive or exclusive (> vs >=)?"
+                        ],
+                        "approach": "Start by selecting all data, then add filtering conditions for both criteria.",
+                        "english_hints": [
+                            "You need to filter rows based on two conditions that must both be true",
+                            "Text values in SQL need to be wrapped in quotes"
+                        ],
+                        "code_hints": [
+                            "SELECT * FROM ___ WHERE ___ AND ___"
+                        ]
+                    },
                     "solution_steps": [
                         "SELECT * FROM ad_performance_daily",
                         "SELECT * FROM ad_performance_daily WHERE device = 'MOBILE'",
@@ -158,11 +175,20 @@ ad_groups, ad_performance_daily constantly.""",
 {magenta}Key Insight:{reset} ORDER BY runs AFTER SELECT, so you CAN use aliases here!
   SELECT cost_micros/1000000 AS cost_usd ... ORDER BY cost_usd DESC  {green}-- WORKS!{reset}""",
                     "challenge": "Show the top 5 ad performance rows by clicks (highest first). Include date, campaign_id, clicks, and cost_micros.",
-                    "hints": [
-                        "SELECT specific columns, not *",
-                        "ORDER BY clicks DESC for highest first",
-                        "Add LIMIT 5 at the end"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "When you say 'top 5', do you mean highest or most recent?",
+                            "Should ties be handled in any special way?"
+                        ],
+                        "approach": "Select the specific columns needed, sort by the ranking metric, then limit the results.",
+                        "english_hints": [
+                            "You need to sort results before limiting them",
+                            "Descending order puts highest values first"
+                        ],
+                        "code_hints": [
+                            "SELECT ... FROM ... ORDER BY ___ DESC LIMIT ___"
+                        ]
+                    },
                     "solution_steps": [
                         "SELECT date, campaign_id, clicks, cost_micros",
                         "SELECT date, campaign_id, clicks, cost_micros FROM ad_performance_daily",
@@ -194,11 +220,20 @@ ad_groups, ad_performance_daily constantly.""",
   • Aliases DO work in ORDER BY (runs after SELECT)
   • HAVING exists separately from WHERE (needs aggregated values)""",
                     "challenge": "Calculate cost in USD (cost_micros / 1000000) as cost_usd, then ORDER BY cost_usd descending. Limit to 5 rows.",
-                    "hints": [
-                        "Create an alias: cost_micros / 1000000.0 AS cost_usd",
-                        "You can use the alias in ORDER BY",
-                        "Include date and campaign_id for context"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "Should I use integer or decimal division for accuracy?",
+                            "What other columns should I include for context?"
+                        ],
+                        "approach": "Create a calculated column with an alias, then use that alias in the ORDER BY clause.",
+                        "english_hints": [
+                            "Remember the execution order - aliases are available in ORDER BY because it runs after SELECT",
+                            "Use decimal (1000000.0) to avoid integer division truncation"
+                        ],
+                        "code_hints": [
+                            "SELECT ..., cost_micros / 1000000.0 AS cost_usd ... ORDER BY cost_usd DESC"
+                        ]
+                    },
                     "solution_steps": [
                         "SELECT date, campaign_id, cost_micros / 1000000.0 AS cost_usd",
                         "SELECT date, campaign_id, cost_micros / 1000000.0 AS cost_usd FROM ad_performance_daily",
@@ -235,12 +270,20 @@ ad_groups, ad_performance_daily constantly.""",
   "What's total spend?" → SUM(cost_micros)
   "Average CTR?" → AVG(clicks * 100.0 / impressions)""",
                     "challenge": "Calculate the total impressions, total clicks, and total cost in USD across ALL rows in ad_performance_daily.",
-                    "hints": [
-                        "Use SUM() for each metric",
-                        "No GROUP BY needed - you want one total across everything",
-                        "Divide cost_micros by 1000000.0 for USD",
-                        "Use AS to create readable column names"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "Do we want totals across all data or broken down by some dimension?",
+                            "Should cost be in micros or converted to USD?"
+                        ],
+                        "approach": "Use aggregate functions to collapse all rows into a single summary row.",
+                        "english_hints": [
+                            "When you want a single total across all rows, you don't need GROUP BY",
+                            "Give your calculated columns meaningful names using aliases"
+                        ],
+                        "code_hints": [
+                            "SELECT SUM(___) AS ___, SUM(___) AS ___ FROM ___"
+                        ]
+                    },
                     "solution_steps": [
                         "SELECT SUM(impressions)",
                         "SELECT SUM(impressions) AS total_impressions, SUM(clicks) AS total_clicks",
@@ -274,11 +317,20 @@ Every column in SELECT must either be:
   GROUP BY device       -- mobile vs desktop
   GROUP BY date         -- daily trends""",
                     "challenge": "For each campaign_id, show the total impressions, total clicks, and total cost in USD.",
-                    "hints": [
-                        "SELECT campaign_id and your aggregates",
-                        "Use SUM() for each metric",
-                        "GROUP BY campaign_id at the end"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "Should I include campaigns with zero activity?",
+                            "Do you want any specific ordering of the results?"
+                        ],
+                        "approach": "Select the grouping column plus aggregates, then specify what to group by.",
+                        "english_hints": [
+                            "Every non-aggregated column in SELECT must appear in GROUP BY",
+                            "Think of GROUP BY as creating buckets - one per unique campaign_id"
+                        ],
+                        "code_hints": [
+                            "SELECT ___, SUM(___), SUM(___) FROM ___ GROUP BY ___"
+                        ]
+                    },
                     "solution_steps": [
                         "SELECT campaign_id",
                         "SELECT campaign_id, SUM(impressions) AS total_impressions",
@@ -309,11 +361,20 @@ Every column in SELECT must either be:
 
 {yellow}Key Insight:{reset} HAVING can use aggregate functions, WHERE cannot.""",
                     "challenge": "Show campaigns where total clicks exceed 2000. Display campaign_id, total clicks, and total cost in USD.",
-                    "hints": [
-                        "First write a GROUP BY query for campaign metrics",
-                        "Add HAVING after GROUP BY",
-                        "HAVING SUM(clicks) > 2000"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "Are we filtering on individual row clicks or total clicks per campaign?",
+                            "Is 2000 inclusive or exclusive?"
+                        ],
+                        "approach": "First aggregate by campaign, then filter the groups based on their totals.",
+                        "english_hints": [
+                            "WHERE filters rows before grouping; HAVING filters groups after aggregation",
+                            "You can use aggregate functions in HAVING but not in WHERE"
+                        ],
+                        "code_hints": [
+                            "SELECT ... FROM ... GROUP BY ... HAVING SUM(___) > ___"
+                        ]
+                    },
                     "solution_steps": [
                         "SELECT campaign_id, SUM(clicks) AS total_clicks, SUM(cost_micros) / 1000000.0 AS total_cost_usd FROM ad_performance_daily GROUP BY campaign_id",
                         "SELECT campaign_id, SUM(clicks) AS total_clicks, SUM(cost_micros) / 1000000.0 AS total_cost_usd FROM ad_performance_daily GROUP BY campaign_id HAVING SUM(clicks) > 2000;"
@@ -348,11 +409,20 @@ Join campaigns to ad_performance_daily to get campaign names alongside metrics.
 {yellow}Pro Tip:{reset} Always use table aliases (c, p, ag) - cleaner and required
 when column names overlap.""",
                     "challenge": "Join campaigns to ad_performance_daily to show campaign_name, date, clicks, and cost_micros for each performance row.",
-                    "hints": [
-                        "Start with FROM ad_performance_daily p",
-                        "JOIN campaigns c ON matching campaign_id",
-                        "Select: c.campaign_name, p.date, p.clicks, p.cost_micros"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "What column links these two tables together?",
+                            "Should we include performance rows that don't match a campaign?"
+                        ],
+                        "approach": "Start from the table with the most rows, then join the reference table to get the name.",
+                        "english_hints": [
+                            "Use table aliases (like 'p' and 'c') to keep the query readable",
+                            "The ON clause specifies which columns to match between tables"
+                        ],
+                        "code_hints": [
+                            "SELECT c.___, p.___ FROM ad_performance_daily p JOIN campaigns c ON p.___ = c.___"
+                        ]
+                    },
                     "solution_steps": [
                         "SELECT c.campaign_name, p.date, p.clicks, p.cost_micros",
                         "SELECT c.campaign_name, p.date, p.clicks, p.cost_micros FROM ad_performance_daily p",
@@ -386,12 +456,20 @@ Campaign 4 (YouTube_Awareness) is PAUSED - may have no performance rows.
   LEFT JOIN ad_performance_daily p ON c.campaign_id = p.campaign_id
     AND p.device = 'MOBILE'""",
                     "challenge": "Show ALL campaigns (including those with no performance data) with their total clicks. Use COALESCE to show 0 instead of NULL.",
-                    "hints": [
-                        "Start FROM campaigns (left table keeps all rows)",
-                        "LEFT JOIN ad_performance_daily",
-                        "Use COALESCE(SUM(p.clicks), 0) to replace NULL with 0",
-                        "GROUP BY c.campaign_name"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "Should campaigns with no performance data show as 0 or be excluded?",
+                            "What should happen to NULL values in the aggregation?"
+                        ],
+                        "approach": "Use a join type that preserves all rows from the campaigns table, even without matches.",
+                        "english_hints": [
+                            "LEFT JOIN keeps all rows from the left (first) table",
+                            "COALESCE returns the first non-NULL value from its arguments"
+                        ],
+                        "code_hints": [
+                            "SELECT c.___, COALESCE(SUM(___), 0) FROM campaigns c LEFT JOIN ___ ON ... GROUP BY ___"
+                        ]
+                    },
                     "solution_steps": [
                         "SELECT c.campaign_name FROM campaigns c",
                         "SELECT c.campaign_name FROM campaigns c LEFT JOIN ad_performance_daily p ON c.campaign_id = p.campaign_id",
@@ -420,13 +498,20 @@ Start from fact table (ad_performance_daily), join dimension tables.
   • Think about grain: what's each row in your result?
   • JOIN order usually doesn't matter for results (optimizer handles it)""",
                     "challenge": "Write a 3-table join: Show campaign_name, ad_group_name, total impressions, total clicks, and total conversions for each ad group.",
-                    "hints": [
-                        "FROM ad_performance_daily p (fact table)",
-                        "JOIN campaigns c ON campaign_id",
-                        "JOIN ad_groups ag ON ad_group_id",
-                        "GROUP BY c.campaign_name, ag.ad_group_name",
-                        "SUM the metrics"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "Which table has the metrics we need to aggregate?",
+                            "What columns link these three tables together?"
+                        ],
+                        "approach": "Start from the fact table (performance data), then join dimension tables to get names.",
+                        "english_hints": [
+                            "Chain joins together - each JOIN adds another table to your result",
+                            "GROUP BY must include all non-aggregated columns (both names)"
+                        ],
+                        "code_hints": [
+                            "FROM ad_performance_daily p JOIN campaigns c ON ... JOIN ad_groups ag ON ..."
+                        ]
+                    },
                     "solution_steps": [
                         "SELECT c.campaign_name, ag.ad_group_name",
                         "SELECT c.campaign_name, ag.ad_group_name, SUM(p.impressions) AS total_impr, SUM(p.clicks) AS total_clicks, SUM(p.conversions) AS total_conv",
@@ -465,12 +550,20 @@ Start from fact table (ad_performance_daily), join dimension tables.
   "Find top ad group per campaign"
   "Number rows for deduplication" """,
                     "challenge": "For each row in ad_performance_daily, rank by clicks within each campaign_id (highest first). Show campaign_id, date, device, clicks, and rank.",
-                    "hints": [
-                        "Use RANK() OVER (...)",
-                        "PARTITION BY campaign_id",
-                        "ORDER BY clicks DESC",
-                        "Give the rank an alias like click_rank"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "How should ties be handled - same rank or different?",
+                            "Should the ranking reset for each campaign or be global?"
+                        ],
+                        "approach": "Use a window function that computes rank within partitions defined by campaign.",
+                        "english_hints": [
+                            "PARTITION BY is like GROUP BY but keeps all rows instead of collapsing them",
+                            "The ORDER BY inside OVER() determines ranking order, not result order"
+                        ],
+                        "code_hints": [
+                            "RANK() OVER (PARTITION BY ___ ORDER BY ___ DESC) AS ___"
+                        ]
+                    },
                     "solution_steps": [
                         "SELECT campaign_id, date, device, clicks",
                         "SELECT campaign_id, date, device, clicks, RANK() OVER (...) AS click_rank",
@@ -498,12 +591,20 @@ Start from fact table (ad_performance_daily), join dimension tables.
   ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW = cumulative sum
   ROWS BETWEEN 6 PRECEDING AND CURRENT ROW = 7-day rolling window""",
                     "challenge": "For campaign_id = 1, show date, daily total clicks, and previous day's clicks using LAG. First aggregate by date, then apply LAG.",
-                    "hints": [
-                        "Use a CTE or subquery to first get daily totals",
-                        "Filter WHERE campaign_id = 1",
-                        "GROUP BY date to get daily totals",
-                        "Then apply LAG(daily_clicks, 1) OVER (ORDER BY date)"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "Should we compare to the previous calendar day or previous row?",
+                            "What should happen on the first day (no previous data)?"
+                        ],
+                        "approach": "First aggregate to get daily totals, then use a window function to look at the previous row.",
+                        "english_hints": [
+                            "LAG looks backward in the result set; LEAD looks forward",
+                            "A CTE (WITH clause) lets you build the query in logical steps"
+                        ],
+                        "code_hints": [
+                            "WITH daily AS (SELECT date, SUM(clicks) ... GROUP BY date) SELECT ..., LAG(___, 1) OVER (ORDER BY ___)"
+                        ]
+                    },
                     "solution_steps": [
                         "First get daily totals: SELECT date, SUM(clicks) AS daily_clicks FROM ad_performance_daily WHERE campaign_id = 1 GROUP BY date",
                         "Wrap in CTE: WITH daily AS (SELECT date, SUM(clicks) AS daily_clicks FROM ad_performance_daily WHERE campaign_id = 1 GROUP BY date)",
@@ -536,12 +637,20 @@ Start from fact table (ad_performance_daily), join dimension tables.
 
 {yellow}Pro Tip:{reset} In interviews, START with CTEs. Shows structured thinking.""",
                     "challenge": "Use a CTE to calculate total spend and conversions per campaign, then calculate cost per conversion (CPA). Join to campaigns for the name.",
-                    "hints": [
-                        "Create CTE: WITH campaign_metrics AS (SELECT campaign_id, SUM(cost_micros)/1000000.0 AS total_cost_usd, SUM(conversions) AS total_conversions FROM ad_performance_daily GROUP BY campaign_id)",
-                        "In main query, JOIN to campaigns",
-                        "Calculate CPA: total_cost_usd / total_conversions",
-                        "Use CASE WHEN to avoid divide by zero"
-                    ],
+                    "hints": {
+                        "clarifying_questions": [
+                            "How should we handle campaigns with zero conversions (divide by zero)?",
+                            "Should CPA be rounded to a specific precision?"
+                        ],
+                        "approach": "Build a CTE with aggregated metrics, then join to get names and calculate derived metrics.",
+                        "english_hints": [
+                            "CTEs make complex queries readable by breaking them into named steps",
+                            "Use CASE WHEN to handle edge cases like division by zero"
+                        ],
+                        "code_hints": [
+                            "WITH campaign_metrics AS (SELECT campaign_id, SUM(...), SUM(...) FROM ... GROUP BY ...) SELECT c.campaign_name, ... FROM campaign_metrics cm JOIN campaigns c ON ..."
+                        ]
+                    },
                     "solution_steps": [
                         "WITH campaign_metrics AS (SELECT campaign_id, SUM(cost_micros) / 1000000.0 AS total_cost_usd, SUM(conversions) AS total_conversions FROM ad_performance_daily GROUP BY campaign_id)",
                         "WITH campaign_metrics AS (...) SELECT c.campaign_name, cm.total_cost_usd, cm.total_conversions FROM campaign_metrics cm JOIN campaigns c ON cm.campaign_id = c.campaign_id",
@@ -626,11 +735,29 @@ def print_error_box(message):
 {message}
 """)
 
-def print_hint_box(hint_num, total_hints, hint_text):
+def print_hint_box(hint_num, total_hints, hint_text, category="Hint"):
     """Print a hint in a styled box."""
+    # Color based on category
+    if category == "Questions to Ask":
+        color = C.CYAN
+        icon = "?"
+    elif category == "Your Approach":
+        color = C.MAGENTA
+        icon = "→"
+    elif category == "Conceptual Hint":
+        color = C.YELLOW
+        icon = "•"
+    elif category == "Code Hint":
+        color = C.GREEN
+        icon = "#"
+    else:
+        color = C.YELLOW
+        icon = "•"
+
+    header = f"{category.upper()} ({hint_num}/{total_hints})"
     print(f"""
-{C.YELLOW}╔══════════════════════════════════════════════════════════════════╗
-║  {C.BOLD}HINT {hint_num} of {total_hints}{C.RESET}{C.YELLOW}                                                       ║
+{color}╔══════════════════════════════════════════════════════════════════╗
+║  {C.BOLD}{icon} {header:<62}{C.RESET}{color} ║
 ╚══════════════════════════════════════════════════════════════════╝{C.RESET}
 
 {hint_text}
@@ -1010,12 +1137,42 @@ Commands: run <sql> │ hint │ next │ answer │ schema │ help
         if cmd_lower == "hint" or cmd_lower == "stuck" or cmd_lower == "help me":
             if not lesson:
                 return True
-            hints = lesson.get("hints", [])
-            if self.current_hint < len(hints):
-                print_hint_box(self.current_hint + 1, len(hints), hints[self.current_hint])
-                self.current_hint += 1
+            hints = lesson.get("hints", {})
+
+            # Handle both old list format and new dict format
+            if isinstance(hints, list):
+                # Legacy format
+                if self.current_hint < len(hints):
+                    print_hint_box(self.current_hint + 1, len(hints), hints[self.current_hint], "Hint")
+                    self.current_hint += 1
+                else:
+                    print(f"{C.YELLOW}No more hints! Type 'answer' to see the solution.{C.RESET}")
             else:
-                print(f"{C.YELLOW}No more hints! Type 'answer' to see the solution.{C.RESET}")
+                # New structured format
+                hint_sequence = []
+
+                # 1. Clarifying questions
+                for q in hints.get("clarifying_questions", []):
+                    hint_sequence.append(("Questions to Ask", q))
+
+                # 2. Approach
+                if hints.get("approach"):
+                    hint_sequence.append(("Your Approach", hints["approach"]))
+
+                # 3. English hints
+                for h in hints.get("english_hints", []):
+                    hint_sequence.append(("Conceptual Hint", h))
+
+                # 4. Code hints (last resort)
+                for h in hints.get("code_hints", []):
+                    hint_sequence.append(("Code Hint", h))
+
+                if self.current_hint < len(hint_sequence):
+                    category, hint_text = hint_sequence[self.current_hint]
+                    print_hint_box(self.current_hint + 1, len(hint_sequence), hint_text, category)
+                    self.current_hint += 1
+                else:
+                    print(f"{C.YELLOW}No more hints! Type 'answer' to see the solution.{C.RESET}")
             return True
 
         # Next step or next lesson
